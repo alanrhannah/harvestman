@@ -1,8 +1,12 @@
 import scrapy
 
+from haravestman import settings
+from harvestman.items import HarvestmanItem
+
 class GoogleSerpSpider(scrapy.Spider):
 	name = 'google_serp_spider'
-	allowed_domains = []
+	domain_name = 'google'
+	allowed_domains = settings.ALLOWED_DOMAINS
 	start_urls = []
 
 	def parse(self, response):

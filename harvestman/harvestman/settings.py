@@ -83,3 +83,49 @@ NEWSPIDER_MODULE = 'harvestman.spiders'
 #HTTPCACHE_DIR='httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES=[]
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+ALLOWED_DOMAINS = [
+            # Asia
+            'https://www.google.com.qa', # Qatar
+            'https://www.google.ae', # United Arab Emirates
+            'https://www.google.co.jp', # Japan
+            'https://www.google.ru', # Russia
+            'https://www.google.co.in', # India
+            'https://www.google.cn', # China not working
+            # Europe
+            'https://www.google.co.uk', # UK
+            'https://www.google.ie', # Ireland
+            'https://www.google.bg', # Bulgaria
+            'https://www.google.pl', # Poland
+            'https://www.google.fi', # Finland
+            'https://www.google.no', # Norway
+            'https://www.google.se', # Sweden
+            'https://www.google.it', # Italy
+            'https://www.google.pt', # Portugal
+            'https://www.google.es', # Spain
+            'https://www.google.at', # Austria
+            'https://www.google.fr', # France
+            'https://www.google.de', # Germany
+            'https://www.google.nl', # Netherlands
+            'https://www.google.ch', # Switzerland
+            'https://www.google.ro', # Romania
+            # North America
+            'https://www.google.com', # US
+            'https://www.google.ca', # Canada
+            'https://www.google.com.mx', # Mexico
+            # South America
+            'https://www.google.cl', # Chile
+            'https://www.google.com.co', # Colombia
+            'https://www.google.com.br', # Brazil
+            'https://www.google.com.pe', # Peru
+            'https://www.google.com.ar', # Argentina
+            'https://www.google.com.bo', # Bolivia
+            'https://www.google.co.ve', # Venezuela
+            # Australia & New Zealand
+            'https://www.google.com.au', # Australia
+            'https://www.google.co.nz', # New Zealand
+            # Africa
+            'https://www.google.com.ng', # Nigeria
+            'https://www.google.co.za', # South Africa
+            'https://www.google.dz', # Algeria
+	]
