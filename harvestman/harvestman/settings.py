@@ -132,5 +132,10 @@ ALLOWED_DOMAINS = [
     'google.dz' # Algeria
 ]
 
+BASE_SEARCH_URLS = {
+	'uk': 'https://www.google.co.uk/search?gl=gb&q={self}&start={}&num=100&gbv=1'
+}
+	
+
 START_INDEX = 0
 RANK = 1
