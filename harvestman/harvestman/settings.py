@@ -23,9 +23,14 @@ USER_AGENT = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY=15
+DOWNLOAD_DELAY=5
 
 COOKIES_ENABLED=False
+
+DOWNLOADER_MIDDLEWARES = {
+	'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+	'harvestman.middlewares.ProxyMiddleware': 100,
+}
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = { 
@@ -35,7 +40,7 @@ DEFAULT_REQUEST_HEADERS = {
 }
 
 ITEM_PIPELINES = {
-    'harvestman.pipelines.SomePipeline': 300,
+    'harvestman.pipelines.HarvestmanPipeline': 300,
 }
 
 ALLOWED_DOMAINS = [
@@ -130,6 +135,11 @@ BASE_SEARCH_URLS = {
 	'dz': 'https://www.google.dz/search?gl=dz&q={}&start={}&num={}&gbv=1'
 }
 	
+PROXIES = [
+	'209.222.30.143:3128',
+	'78.129.194.54:3128',
+	'95.154.207.14:3128'
+	]
 
 START_INDEX = 0
 RANK = 1
@@ -138,3 +148,7 @@ BASE_DIR = os.environ['DATA_EXPORT_DIR']
 
 CSV_FILE_OUTPUT_DIR = os.path.join(
     BASE_DIR, 'scrapy_results/google_serp_spider_{}.csv')
+
+
+# LOG_FILE = '/home/alan/development/data/scrapy.log'
+LOG_LEVEL = 'DEBUG'

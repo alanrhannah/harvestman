@@ -20,6 +20,8 @@ class GoogleSerpSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
 
         super(GoogleSerpSpider, self).__init__(*args, **kwargs)
+        
+        # refactor this
         if kwargs.get('file'):
             filepath = kwargs['file']
             if os.path.exists(filepath):
@@ -31,6 +33,7 @@ class GoogleSerpSpider(scrapy.Spider):
         if kwargs.get('results_per_page'):
             self.results_per_page = kwargs['results_per_page']
 
+        # refactor this
         for query in self.queries:
             query_url = self.base_url.format(query,
                                              self.start_index,
