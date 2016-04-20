@@ -133,7 +133,7 @@ ALLOWED_DOMAINS = [
 ]
 
 BASE_SEARCH_URLS = {
-	'uk': 'https://www.google.co.uk/search?gl=gb&q={self}&start={}&num=100&gbv=1'
+	'uk': 'https://www.google.co.uk/search?gl=gb&q={}&start={}&num={}&gbv=1'
 }
 	
 
