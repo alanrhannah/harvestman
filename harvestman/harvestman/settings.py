@@ -16,7 +16,9 @@ NEWSPIDER_MODULE = 'harvestman.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'harvestman (+http://www.yourdomain.com)'
+USER_AGENT = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
+	'(KHTML, like Gecko) Ubuntu Chromium/49.0.2623.108 Chrome/49.0.2623.108 '
+	'Safari/537.36')
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS=32
@@ -85,47 +87,50 @@ NEWSPIDER_MODULE = 'harvestman.spiders'
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 ALLOWED_DOMAINS = [
-            # Asia
-            'https://www.google.com.qa', # Qatar
-            'https://www.google.ae', # United Arab Emirates
-            'https://www.google.co.jp', # Japan
-            'https://www.google.ru', # Russia
-            'https://www.google.co.in', # India
-            'https://www.google.cn', # China not working
-            # Europe
-            'https://www.google.co.uk', # UK
-            'https://www.google.ie', # Ireland
-            'https://www.google.bg', # Bulgaria
-            'https://www.google.pl', # Poland
-            'https://www.google.fi', # Finland
-            'https://www.google.no', # Norway
-            'https://www.google.se', # Sweden
-            'https://www.google.it', # Italy
-            'https://www.google.pt', # Portugal
-            'https://www.google.es', # Spain
-            'https://www.google.at', # Austria
-            'https://www.google.fr', # France
-            'https://www.google.de', # Germany
-            'https://www.google.nl', # Netherlands
-            'https://www.google.ch', # Switzerland
-            'https://www.google.ro', # Romania
-            # North America
-            'https://www.google.com', # US
-            'https://www.google.ca', # Canada
-            'https://www.google.com.mx', # Mexico
-            # South America
-            'https://www.google.cl', # Chile
-            'https://www.google.com.co', # Colombia
-            'https://www.google.com.br', # Brazil
-            'https://www.google.com.pe', # Peru
-            'https://www.google.com.ar', # Argentina
-            'https://www.google.com.bo', # Bolivia
-            'https://www.google.co.ve', # Venezuela
-            # Australia & New Zealand
-            'https://www.google.com.au', # Australia
-            'https://www.google.co.nz', # New Zealand
-            # Africa
-            'https://www.google.com.ng', # Nigeria
-            'https://www.google.co.za', # South Africa
-            'https://www.google.dz', # Algeria
-	]
+    # Asia
+    'google.com.qa', # Qatar
+    'google.ae', # United Arab Emirates
+    'google.co.jp', # Japan
+    'google.ru', # Russia
+    'google.co.in', # India
+    'google.cn', # China not working
+    # Europe
+    'google.co.uk', # UK
+    'google.ie', # Ireland
+    'google.bg', # Bulgaria
+    'google.pl', # Poland
+    'google.fi', # Finland
+    'google.no', # Norway
+    'google.se', # Sweden
+    'google.it', # Italy
+    'google.pt', # Portugal
+    'google.es', # Spain
+    'google.at', # Austria
+    'google.fr', # France
+    'google.de', # Germany
+    'google.nl', # Netherlands
+    'google.ch', # Switzerland
+    'google.ro', # Romania
+    # North America
+    'google.com', # US
+    'google.ca', # Canada
+    'google.com.mx', # Mexico
+    # South America
+    'google.cl', # Chile
+    'google.com.co', # Colombia
+    'google.com.br', # Brazil
+    'google.com.pe', # Peru
+    'google.com.ar', # Argentina
+    'google.com.bo', # Bolivia
+    'google.co.ve', # Venezuela
+    # Australia & New Zealand
+    'google.com.au', # Australia
+    'google.co.nz', # New Zealand
+    # Africa
+    'google.com.ng', # Nigeria
+    'google.co.za', # South Africa
+    'google.dz' # Algeria
+]
+
+START_INDEX = 0
+RANK = 1
