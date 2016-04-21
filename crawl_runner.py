@@ -1,4 +1,5 @@
 import argparse
+import json
 import requests
 import sys
 
@@ -12,15 +13,24 @@ class CrawlRunner(object):
         self.arguments = arguments
 
     def main(self):
+        
         crawl_request_json_payloads = []
         for phrase in split_list_of_queries(self.arguments.file_path[0]):
             crawl_request_json_payloads.append(
-                create_crawl_request_json_payload)
-        
-        import ipdb; ipdb.set_trace()
-        pass
-        
+                self.create_crawl_request_json_payload(phrase))
 
+    def create_crawl_request_json_payload(self, phrase):
+        json_payload = {
+            'phrase': phrase,
+            'country': self.arguments.country[0]
+        }
+        
+        if self.arguments.results_per_page:
+            json_payload['results_per_page'] =\
+                self.arguments.results_per_page[0]
+        
+        return json.dumps(json_payload)
+       
 def parse_arguments(arguments):
     parser = argparse.ArgumentParser()
     parser.add_argument('-f',
