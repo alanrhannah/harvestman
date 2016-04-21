@@ -102,3 +102,25 @@ def test_create_json_payload():
     ]
     
     assert crawl_request_json_payloads == expected
+
+def test_create_json_payload_with_results_per_page():
+    content = create_input_file()
+    cr = create_class_instance(['-f',
+                                content.name,
+                                '-c',
+                                'gb',
+                                '-r',
+                                '10'])
+    crawl_request_json_payloads = []
+    
+    for phrase in split_list_of_queries(cr.arguments.file_path[0]):
+        crawl_request_json_payloads.append(
+            cr.create_crawl_request_json_payload(phrase))
+
+    expected = [
+        '{"phrase": "some keyword", "results_per_page": 10, "country": "gb"}',
+        '{"phrase": "another keyword", "results_per_page": 10, "country": "gb"}',
+        '{"phrase": "some more keywords", "results_per_page": 10, "country": "gb"}'
+    ]
+
+    assert crawl_request_json_payloads == expected
