@@ -1,12 +1,9 @@
-import os
 import re
 import scrapy
-import urlparse
 
 from harvestman import settings
 from harvestman.items import HarvestmanItem
-from harvestman.utils import (split_list_of_queries,
-                              update_url_start_index_parameter)
+from .utils import update_url_start_index_parameter
 
 
 class GoogleSerpSpider(scrapy.Spider):
@@ -21,24 +18,19 @@ class GoogleSerpSpider(scrapy.Spider):
 
         super(GoogleSerpSpider, self).__init__(*args, **kwargs)
         
-        # refactor this
-        if kwargs.get('file'):
-            filepath = kwargs['file']
-            if os.path.exists(filepath):
-                self.queries = split_list_of_queries(filepath)
-
+        if kwargs.get('phrase'):
+            self.phrase = kwargs['phrase']
+            
         if kwargs.get('country'):
             self.base_url = settings.BASE_SEARCH_URLS[kwargs['country']]
 
         if kwargs.get('results_per_page'):
-            self.results_per_page = kwargs['results_per_page']
+            self.results_per_page = int(kwargs['results_per_page'])
 
-        # refactor this
-        for query in self.queries:
-            query_url = self.base_url.format(query,
-                                             self.start_index,
-                                             self.results_per_page)
-            self.start_urls.append(query_url)
+        query_url = self.base_url.format(self.phrase,
+                                         self.start_index,
+                                         self.results_per_page)
+        self.start_urls.append(query_url)
 
     def parse(self, response):
         """
@@ -86,16 +78,12 @@ class GoogleSerpSpider(scrapy.Spider):
 
             yield scrapy.Request(next_page_url, self.parse)
 
-
-        parsed_query_string = urlparse.urlparse(response.request.url).query
-        self.params = urlparse.parse_qs(parsed_query_string)
-
         for result in results:
             if result.xpath('div[@class="s"]'):
                 if self.rank <= 100:
                     item = HarvestmanItem()
 
-                    item['keyphrase'] = self.params['q'][0]
+                    item['keyphrase'] = self.phrase
                     item['rank'] = self.rank
                     item['estimated'] = estimated
 
