@@ -1,9 +1,10 @@
 import argparse
 import json
 import requests
+import settings
 import sys
 
-from utils import split_list_of_queries
+from harvestman.harvestman.utils import split_list_of_queries
 
 # from harvestman.utils import split_list_of_queries
 
@@ -19,18 +20,31 @@ class CrawlRunner(object):
             crawl_request_json_payloads.append(
                 self.create_crawl_request_json_payload(phrase))
 
+        for payload in crawl_request_json_payloads:
+            crawl_request = self.send_crawl_request(payload)
+            if not crawl_request:
+                print('Raise exception here')
+
+    def send_crawl_request(self, payload):
+        response = requests.post(settings.SCRAPYD_SCHEDULE_JOB,
+                                data=payload)
+        import ipdb; ipdb.set_trace()
+
     def create_crawl_request_json_payload(self, phrase):
-        json_payload = {
+        payload = {
+            'spider': 'google_serp_spider',
+            'project': 'harvestman',
             'phrase': phrase,
             'country': self.arguments.country[0]
         }
         
         if self.arguments.results_per_page:
-            json_payload['results_per_page'] =\
-                self.arguments.results_per_page[0]
+            payload['results_per_page'] =\
+                str(self.arguments.results_per_page[0])
         
-        return json.dumps(json_payload)
+        return payload
        
+
 def parse_arguments(arguments):
     parser = argparse.ArgumentParser()
     parser.add_argument('-f',

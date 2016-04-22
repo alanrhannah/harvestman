@@ -1,10 +1,11 @@
+# from __future__ import absolute_import
+
 import re
 import scrapy
 
 from harvestman import settings
+from harvestman.utils import update_url_start_index_parameter
 from harvestman.items import HarvestmanItem
-from .utils import update_url_start_index_parameter
-
 
 class GoogleSerpSpider(scrapy.Spider):
     name = 'google_serp_spider'

@@ -2,7 +2,8 @@ import json
 import tempfile
 
 from crawl_runner import parse_arguments, CrawlRunner
-from utils import split_list_of_queries, update_url_start_index_parameter
+from harvestman.harvestman.utils import (split_list_of_queries,
+                                         update_url_start_index_parameter)
 
 def create_input_file():
     content = 'some keyword\nanother keyword\nsome more keywords\n'
@@ -86,7 +87,7 @@ def test_create_json_list_of_strings():
     ]
     assert crawl_request_json_payloads == expected
 
-def test_create_json_payload():
+def test_create_payload():
     content = create_input_file()
     cr = create_class_instance(['-f', content.name, '-c', 'gb'])
     crawl_request_json_payloads = []
@@ -96,9 +97,18 @@ def test_create_json_payload():
             cr.create_crawl_request_json_payload(phrase))
 
     expected = [
-        '{"phrase": "some keyword", "country": "gb"}',
-        '{"phrase": "another keyword", "country": "gb"}',
-        '{"phrase": "some more keywords", "country": "gb"}'
+        {'spider': 'google_serp_spider',
+         'project': 'harvestman',
+         'phrase': 'some keyword',
+         'country': 'gb'},
+        {'spider': 'google_serp_spider',
+         'project': 'harvestman',
+         'phrase': 'another keyword',
+         'country': 'gb'},
+        {'spider': 'google_serp_spider',
+         'project': 'harvestman',
+         'phrase': 'some more keywords',
+         'country': 'gb'}
     ]
     
     assert crawl_request_json_payloads == expected
@@ -118,9 +128,21 @@ def test_create_json_payload_with_results_per_page():
             cr.create_crawl_request_json_payload(phrase))
 
     expected = [
-        '{"phrase": "some keyword", "results_per_page": 10, "country": "gb"}',
-        '{"phrase": "another keyword", "results_per_page": 10, "country": "gb"}',
-        '{"phrase": "some more keywords", "results_per_page": 10, "country": "gb"}'
+        {'spider': 'google_serp_spider',
+         'project': 'harvestman',
+         'phrase': 'some keyword',
+         'results_per_page': '10',
+         'country': 'gb'},
+        {'spider': 'google_serp_spider',
+         'project': 'harvestman',
+         'phrase': 'another keyword',
+         'results_per_page': '10',
+         'country': 'gb'},
+        {'spider': 'google_serp_spider',
+         'project': 'harvestman',
+         'phrase': 'some more keywords',
+         'results_per_page': '10',
+         'country': 'gb'}
     ]
 
     assert crawl_request_json_payloads == expected
