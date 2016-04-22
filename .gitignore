@@ -64,3 +64,4 @@ target/
 #custom
 *.jl
 *.pid
+*/items/*
