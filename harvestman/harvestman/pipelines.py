@@ -27,7 +27,7 @@ class HarvestmanPipeline(object):
         csv_file = settings.CSV_FILE_OUTPUT_DIR.format(
             datetime.date.today().strftime('%Y-%m-%d'))
         if spider.name == 'google_serp_spider':
-            file = open(csv_file, 'wb')
+            file = open(csv_file, 'ab')
             self.files[spider] = file
             self.exporter = CsvItemExporter(file)
             self.exporter.start_exporting()
