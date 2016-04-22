@@ -1,12 +1,10 @@
 import argparse
-import json
 import requests
 import settings
 import sys
 
 from harvestman.harvestman.utils import split_list_of_queries
 
-# from harvestman.utils import split_list_of_queries
 
 class CrawlRunner(object):
 
@@ -21,14 +19,30 @@ class CrawlRunner(object):
                 self.create_crawl_request_json_payload(phrase))
 
         for payload in crawl_request_json_payloads:
-            crawl_request = self.send_crawl_request(payload)
-            if not crawl_request:
-                print('Raise exception here')
+            request = self.send_crawl_request(payload)
+            response = self.handle_crawl_request_response(request)
+            if not response:
+                break
 
     def send_crawl_request(self, payload):
-        response = requests.post(settings.SCRAPYD_SCHEDULE_JOB,
-                                data=payload)
-        import ipdb; ipdb.set_trace()
+        response = None
+        try:
+            response = requests.post(settings.SCRAPYD_SCHEDULE_JOB,
+                                     data=payload,
+                                     allow_redirects=False)
+        except requests.ConnectionError, e:
+            print(e)
+
+        return response
+        
+    def handle_crawl_request_response(self, response):
+        if response.status_code >= 400:
+            try:
+                response.raise_for_status()
+            except requests.exceptions.HTTPError:
+                return False  
+        else:
+            return True
 
     def create_crawl_request_json_payload(self, phrase):
         payload = {

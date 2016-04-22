@@ -1,4 +1,7 @@
 import json
+import pytest
+import requests
+import requests_mock
 import tempfile
 
 from crawl_runner import parse_arguments, CrawlRunner
@@ -146,3 +149,43 @@ def test_create_json_payload_with_results_per_page():
     ]
 
     assert crawl_request_json_payloads == expected
+    content.delete
+
+def test_handle_crawl_request_response():
+    content = create_input_file()
+    session = requests.Session()
+    adapter = requests_mock.Adapter()
+    session.mount('mock', adapter)
+
+    adapter.register_uri('POST',
+                         'mock://test.com/fail_schedule.json',
+                         text='Not Found',
+                         status_code=404)
+
+    adapter.register_uri('POST',
+                         'mock://test.com/pass_schedule.json',
+                         text='Found',
+                         status_code=200)
+
+    not_found_response = session.post('mock://test.com/fail_schedule.json')
+    found_response = session.post('mock://test.com/pass_schedule.json')
+    
+    cr = create_class_instance(['-f', content.name, '-c', 'gb'])
+
+    assert cr.handle_crawl_request_response(not_found_response) == False    
+    assert cr.handle_crawl_request_response(found_response) == True
+
+    e_msg = '404 Client Error: None for url: mock://test.com/fail_schedule.json'
+    with pytest.raises(requests.exceptions.HTTPError) as excinfo:
+        raise requests.exceptions.HTTPError(e_msg)
+
+    assert excinfo.value.message == e_msg    
+
+    content.delete    
+    
+def test_send_crawl_request():
+
+    with pytest.raises(requests.exceptions.ConnectionError) as excinfo:
+        raise requests.exceptions.ConnectionError()
+    
+    assert excinfo.typename == 'ConnectionError'
