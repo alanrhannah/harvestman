@@ -25,11 +25,13 @@ class HarvestmanPipeline(object):
 
     def spider_opened(self, spider):
         csv_file = settings.CSV_FILE_OUTPUT_DIR.format(
+            spider.phrase,
+            spider.base_url.split('/')[2],
             datetime.date.today().strftime('%Y-%m-%d'))
         if spider.name == 'google_serp_spider':
-            file = open(csv_file, 'ab')
+            file = open(csv_file, 'w')
             self.files[spider] = file
-            self.exporter = CsvItemExporter(file)
+            self.exporter = CsvItemExporter(file, delimiter='\t')
             self.exporter.start_exporting()
 
     def spider_closed(self, spider):

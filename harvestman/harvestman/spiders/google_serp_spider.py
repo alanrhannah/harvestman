@@ -15,10 +15,14 @@ class GoogleSerpSpider(scrapy.Spider):
     rank = settings.RANK 
     results_per_page = 10
 
+    phrase = 'ham'
+    base_url = 'https://www.google.co.uk/search?gl=gb&q={}&start={}&num={}&gbv=1'
+    results_per_page = 10
+
     def __init__(self, *args, **kwargs):
 
         super(GoogleSerpSpider, self).__init__(*args, **kwargs)
-        
+
         if kwargs.get('phrase'):
             self.phrase = kwargs['phrase']
             
@@ -33,15 +37,20 @@ class GoogleSerpSpider(scrapy.Spider):
                                          self.results_per_page)
         self.start_urls.append(query_url)
 
+
+    def log_response_code(self, response):
+        self.logger.warning('{} - {} - {}'.format(
+                response.body, self.query, self.user_agent))
+
     def parse(self, response):
         """
         Parse the crawled serp results page
         :param response:    scrapy response object
         :returns items:     dict of items to be processed
         """
-        if response.status != 200:
-            scrapy.log.msg('{} - {} - {}'.format(
-                response.body, self.query, self.user_agent))
+
+        if response.status >= 300:
+            self.log_response_code(response)
             raise scrapy.CloseSpider(response.body)
 
         results = None
@@ -66,6 +75,7 @@ class GoogleSerpSpider(scrapy.Spider):
         items = []
 
         if self.rank <= 100:
+            self.logger.info('{}, {}'.format(self.rank, self.phrase))
             start_param_to_replace = update_url_start_index_parameter(
                 self.start_index)
             
@@ -107,12 +117,13 @@ class GoogleSerpSpider(scrapy.Spider):
 
                     item['title'] = title
                     item['snippet'] = snippet
-                    item['link'] = "".join(result.xpath(
+                    link = "".join(result.xpath(
                         'h3[@class="r"]/a/@href').extract())
 
-                    if not item['link'].startswith('/images?q='):
-                        if item['link'].startswith('/url?q='):
-                            item['link'] = item['link'].replace('/url?q=', '')
+                    if not link.startswith('/images?q='):
+                        if link.startswith('/url?q='):
+                            link = link.split('&sa')
+                            item['link'] = link[0].replace('/url?q=', '')
                         items.append(item)
                         self.rank += 1
                     yield item

@@ -28,6 +28,7 @@ DOWNLOAD_DELAY=5
 COOKIES_ENABLED=False
 
 DOWNLOADER_MIDDLEWARES = {
+	'harvestman.middlewares.CustomStatusCodeMiddleware': 120,
 	'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
 	'harvestman.middlewares.ProxyMiddleware': 100,
 }
@@ -147,7 +148,7 @@ RANK = 1
 BASE_DIR = os.environ['DATA_EXPORT_DIR']
 
 CSV_FILE_OUTPUT_DIR = os.path.join(
-    BASE_DIR, 'scrapy_results/google_serp_spider_{}.csv')
+    BASE_DIR, 'scrapy_results/{}_{}_{}.csv')
 
 
 # LOG_FILE = '/home/alan/development/data/scrapy.log'
