@@ -65,4 +65,4 @@ target/
 *.jl
 *.pid
 */items/*
-*/dbs/*
+dbs/*
