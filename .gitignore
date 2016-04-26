@@ -60,3 +60,10 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#custom
+*.jl
+*.pid
+*/items/*
+*/dbs/*
+*.db
