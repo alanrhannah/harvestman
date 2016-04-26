@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import csv
 import json
 import pytest
 import requests
@@ -220,3 +222,48 @@ def test_google_serp_spider_parse():
         assert item['estimated'] is not None
     
     assert len(results[1:]) == expected_len
+
+def read_csv_data(file_path):
+    with open(file_path, 'r') as f:
+        reader = csv.reader(f, delimiter='\t')
+        data = []
+        for row in reader:
+            data.append(row)
+    return data
+
+def test_google_serp_spider_csv_pipeline():
+    expected_headers = ['title',
+                        'rank',
+                        'snippet',
+                        'link',
+                        'estimated',
+                        'keyphrase']
+    # row 31
+    expected_title = ('Generator Hire Dubai, Abu Dhabi - Dubai Business '
+                      'Directory')
+    # row 16
+    expected_rank = '15'
+    # row 80
+    expected_snippet = 'RENT CRAWLER CRANES UPTO 500 TONS CAPACITY ... ' \
+                       'Power Generators (5 \nto 1200KVA). view all Products ' \
+                       '... Head office Located in Dubai, our services are ' \
+                       '\nspread over a vast geographical area in Middle East.' \
+                       ' We are the most sorted in ...'
+    # row 51
+    expected_link = 'http://yellowpagesonline.ae/co-rts-construction-equipment-rental/179223/products/26251/portacabin-hire-in-uae.html'
+    # row 2
+    expected_estimated = '567000'
+    # row 10
+    expected_keyphrase = 'generator hire dubai'
+
+    file_path = '{}csv_data.csv'.format(settings.TEST_ASSETS_DIR)
+    csv_data = read_csv_data(file_path)
+
+    assert csv_data[0] == expected_headers
+    assert len(csv_data[0]) == len(expected_headers)
+    assert csv_data[30][0] == expected_title
+    assert csv_data[15][1] == expected_rank
+    assert csv_data[79][2] == expected_snippet 
+    assert csv_data[50][3] == expected_link
+    assert csv_data[1][4] == expected_estimated
+    assert csv_data[9][5] == expected_keyphrase
