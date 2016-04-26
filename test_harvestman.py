@@ -198,11 +198,11 @@ def test_send_crawl_request():
     assert excinfo.typename == 'ConnectionError'
 
 def fake_request():
-    file_name = '{}settings.html'.format(settings.TEST_ASSETS_DIR)
+    file_name = '{}sample.html'.format(settings.TEST_ASSETS_DIR)
     request = Request(url='http://www.example.com')
     content = open(file_name, 'r').read()
     response = HtmlResponse(request=request,
-                            content=content,
+                            body=content,
                             url='http://www.example.com')
     return response
 
@@ -212,7 +212,7 @@ def test_google_serp_spider_parse():
     expected_len = 8
 
     for item in results[1:]:
-        assert item['keyprase'] is not None
+        assert item['keyphrase'] is not None
         assert item['rank'] is not None
         assert item['title'] is not None
         assert item['link'] is not None

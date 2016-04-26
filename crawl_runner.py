@@ -3,7 +3,7 @@ import requests
 import settings
 import sys
 
-from harvestman.harvestman.utils import split_list_of_queries
+from harvestman.harvestman_spider.utils import split_list_of_queries
 
 
 class CrawlRunner(object):
