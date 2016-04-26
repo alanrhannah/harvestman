@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from harvestman_spider import settings
+from harvestman.harvestman_spider import settings
 
 from scrapy import signals
 from scrapy.exporters import CsvItemExporter

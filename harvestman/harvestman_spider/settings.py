@@ -151,5 +151,5 @@ CSV_FILE_OUTPUT_DIR = os.path.join(
     BASE_DIR, 'scrapy_results/{}_{}_{}.csv')
 
 
-# LOG_FILE = '/home/alan/development/data/scrapy.log'
+LOG_FILE = '/home/alan/development/data/scrapy.log'
 LOG_LEVEL = 'DEBUG'

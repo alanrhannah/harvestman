@@ -1,6 +1,6 @@
 import argparse
 import requests
-import settings
+import general_settings as settings
 import sys
 
 from harvestman.harvestman_spider.utils import split_list_of_queries
