@@ -5,7 +5,7 @@ import requests_mock
 import tempfile
 
 from crawl_runner import parse_arguments, CrawlRunner
-from harvestman.harvestman.utils import (split_list_of_queries,
+from harvestman.harvestman_spider.utils import (split_list_of_queries,
                                          update_url_start_index_parameter)
 
 def create_input_file():
@@ -189,3 +189,9 @@ def test_send_crawl_request():
         raise requests.exceptions.ConnectionError()
     
     assert excinfo.typename == 'ConnectionError'
+
+def fake_request():
+    pass
+
+def test_parser():
+    pass
