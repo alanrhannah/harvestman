@@ -2,11 +2,18 @@ import json
 import pytest
 import requests
 import requests_mock
+import settings
 import tempfile
 
 from crawl_runner import parse_arguments, CrawlRunner
 from harvestman.harvestman_spider.utils import (split_list_of_queries,
                                          update_url_start_index_parameter)
+
+from harvestman.harvestman_spider.spiders.google_serp_spider import \
+    GoogleSerpSpider as Spider
+
+from scrapy.http import Request
+from scrapy.http.response.html import HtmlResponse
 
 def create_input_file():
     content = 'some keyword\nanother keyword\nsome more keywords\n'
@@ -191,7 +198,25 @@ def test_send_crawl_request():
     assert excinfo.typename == 'ConnectionError'
 
 def fake_request():
-    pass
+    file_name = '{}settings.html'.format(settings.TEST_ASSETS_DIR)
+    request = Request(url='http://www.example.com')
+    content = open(file_name, 'r').read()
+    response = HtmlResponse(request=request,
+                            content=content,
+                            url='http://www.example.com')
+    return response
 
-def test_parser():
-    pass
+def test_google_serp_spider_parse():
+    response = fake_request()
+    results = list(Spider().parse(response))
+    expected_len = 8
+
+    for item in results[1:]:
+        assert item['keyprase'] is not None
+        assert item['rank'] is not None
+        assert item['title'] is not None
+        assert item['link'] is not None
+        assert item['snippet'] is not None
+        assert item['estimated'] is not None
+    
+    assert len(results[1:]) == expected_len
