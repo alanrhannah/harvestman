@@ -66,6 +66,11 @@ To deactivate the virtualenv:
 $ deactivate
 ```
 
+You will need to set some environment variables in your `.bashrc` file:
+
+set `DATA_EXPORT_DIR` to a directory of your choice
+set `PROXIES` to a comma seperated string of proxies with the format `<ip address>:<port>`
+
 ### Project Requirements
 
 ```bash
@@ -76,4 +81,31 @@ $ pip install -r requirements/dev.txt
 ```bash
 # production environment
 $ pip install -r requirements/prod.txt
+```
+---
+
+## Running the spider(s)
+
+With your virtualenv actiavted, run `scrapyd &` from the root directory of the harvestman project to start the server in the background.
+
+Run spiders via `python crawl_runner.py`. 
+
+Full usage:
+
+```bash
+$ python crawl_runner.py --help
+
+usage: crawl_runner.py [-h] -f FILE_PATH -c COUNTRY [-r RESULTS_PER_PAGE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE_PATH, --file_path FILE_PATH
+                        The absolute path to the file containing your
+                        keyphrases
+  -c COUNTRY, --country COUNTRY
+                        The two letter ISO_3166-1_alpha-2 code for the country
+                        you wish to crawl google in.
+  -r RESULTS_PER_PAGE, --results_per_page RESULTS_PER_PAGE
+                        The number of results per page to scrape. This
+                        defaults to 10.
 ```

@@ -10,8 +10,6 @@ class ProxyMiddleware(object):
 class CustomStatusCodeMiddleware(object):
 
 	def process_response(self, request, response, spider):
-		# message = '{} Response OK'
-		
 		if response.status >= 300 and response.status < 400:
 			message = '{} Redirected request, cannot parse results'.format(
 				response.status)

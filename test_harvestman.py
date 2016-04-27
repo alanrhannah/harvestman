@@ -81,7 +81,7 @@ def test_argument_vars():
     assert cr.arguments.country[0] == 'gb'
     assert cr.arguments.file_path[0] == '/this/is/a/file/path' 
 
-def test_create_json_list_of_strings():
+def test_create_list_of_strings():
     content = create_input_file()
     cr = create_class_instance(['-f', content.name, '-c', 'gb'])
     crawl_request_json_payloads = []
@@ -125,7 +125,7 @@ def test_create_payload():
     
     assert crawl_request_json_payloads == expected
 
-def test_create_json_payload_with_results_per_page():
+def test_create_payload_with_results_per_page():
     content = create_input_file()
     cr = create_class_instance(['-f',
                                 content.name,
@@ -193,7 +193,6 @@ def test_handle_crawl_request_response():
     content.delete    
     
 def test_send_crawl_request():
-
     with pytest.raises(requests.exceptions.ConnectionError) as excinfo:
         raise requests.exceptions.ConnectionError()
     

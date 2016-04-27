@@ -136,11 +136,7 @@ BASE_SEARCH_URLS = {
 	'dz': 'https://www.google.dz/search?gl=dz&q={}&start={}&num={}&gbv=1'
 }
 	
-PROXIES = [
-	'209.222.30.143:3128',
-	'78.129.194.54:3128',
-	'95.154.207.14:3128'
-	]
+PROXIES = os.environ['PROXIES'].split(',')
 
 START_INDEX = 0
 RANK = 1
@@ -150,6 +146,4 @@ BASE_DIR = os.environ['DATA_EXPORT_DIR']
 CSV_FILE_OUTPUT_DIR = os.path.join(
     BASE_DIR, 'scrapy_results/{}_{}_{}.csv')
 
-
-LOG_FILE = '/home/alan/development/data/scrapy.log'
 LOG_LEVEL = 'DEBUG'
