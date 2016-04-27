@@ -146,4 +146,4 @@ BASE_DIR = os.environ['DATA_EXPORT_DIR']
 CSV_FILE_OUTPUT_DIR = os.path.join(
     BASE_DIR, 'scrapy_results/{}_{}_{}.csv')
 
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'

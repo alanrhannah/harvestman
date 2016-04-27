@@ -38,16 +38,17 @@ class GoogleSerpSpider(scrapy.Spider):
 
 
     def log_response_code(self, response):
+        """Log response codes if not 200"""
         self.logger.warning('{} - {} - {}'.format(
                 response.body, self.query, self.user_agent))
 
     def parse(self, response):
         """
         Parse the crawled serp results page
+
         :param response:    scrapy response object
         :returns items:     dict of items to be processed
         """
-
         if response.status >= 300:
             self.log_response_code(response)
             raise scrapy.CloseSpider(response.body)

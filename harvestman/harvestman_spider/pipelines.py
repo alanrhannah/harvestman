@@ -11,8 +11,10 @@ from scrapy.exporters import CsvItemExporter
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 class HarvestmanPipeline(object):
+    """Pipepline definition for spiders in the harvestman_spider project"""
 
     def __init__(self):
+        """__init__, innit."""
         self.files = {}
 
     @classmethod
@@ -27,9 +29,11 @@ class HarvestmanPipeline(object):
             spider.phrase,
             spider.base_url.split('/')[2],
             datetime.date.today().strftime('%Y-%m-%d'))
+
         if spider.name == 'google_serp_spider':
             file = open(csv_file, 'w')
             self.files[spider] = file
+            # note this outputs as a tab seperated csv, rather than comma.
             self.exporter = CsvItemExporter(file, delimiter='\t')
             self.exporter.start_exporting()
 
