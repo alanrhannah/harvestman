@@ -15,6 +15,14 @@ SPIDER_MODULES = ['harvestman_spider.spiders']
 NEWSPIDER_MODULE = 'harvestman_spider.spiders'
 
 
+CONCURRENT_REQUESTS = 20
+CONCURRENT_REQUESTS_PER_DOMAIN = 20
+AUTOTHROTTLE_ENABLED = False
+DOWNLOAD_TIMEOUT = 10
+CRAWLERA_PRESERVE_DELAY = True
+CRAWLERA_ENABLED = True
+CRAWLERA_APIKEY = '74adcf3464d84b3d95571883b89226e4'
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
 	'(KHTML, like Gecko) Ubuntu Chromium/49.0.2623.108 Chrome/49.0.2623.108 '
@@ -23,14 +31,13 @@ USER_AGENT = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY=5
+DOWNLOAD_DELAY = 5
 
-COOKIES_ENABLED=False
+COOKIES_ENABLED = False
 
 DOWNLOADER_MIDDLEWARES = {
 	'harvestman_spider.middlewares.CustomStatusCodeMiddleware': 120,
-	'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-	'harvestman_spider.middlewares.ProxyMiddleware': 100,
+	'scrapy_crawlera.CrawleraMiddleware': 600
 }
 
 # Override the default request headers:
@@ -38,6 +45,8 @@ DEFAULT_REQUEST_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Language': 'en',
     'Connection': 'keep-alive',
+    'X-Crawlera-Max-Retries': 3,
+    'X-Crawlera-Use-HTTPS': 1
 }
 
 ITEM_PIPELINES = {
@@ -136,7 +145,9 @@ BASE_SEARCH_URLS = {
 	'dz': 'https://www.google.dz/search?gl=dz&q={}&start={}&num={}&gbv=1'
 }
 	
-PROXIES = os.environ['PROXIES'].split(',')
+PROXIES = ['209.222.30.143:3128',
+           '78.129.194.54:3128',
+           '95.154.207.14:3128']
 
 START_INDEX = 0
 RANK = 1
@@ -146,4 +157,4 @@ BASE_DIR = os.environ['DATA_EXPORT_DIR']
 CSV_FILE_OUTPUT_DIR = os.path.join(
     BASE_DIR, 'scrapy_results/{}_{}_{}.csv')
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'DEBUG'

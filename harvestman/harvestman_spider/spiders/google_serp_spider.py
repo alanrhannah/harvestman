@@ -51,7 +51,7 @@ class GoogleSerpSpider(scrapy.Spider):
         """
         if response.status >= 300:
             self.log_response_code(response)
-            raise scrapy.CloseSpider(response.body)
+            yield scrapy.Request(response.request.url, self.parse)
 
         results = None
         # Get the section containing the results
