@@ -14,7 +14,7 @@ class GoogleSerpSpider(scrapy.Spider):
     rank = settings.RANK 
     results_per_page = 10
 
-    phrase = 'ham'
+    phrase = 'kalignite market share'
     base_url = 'https://www.google.co.uk/search?gl=gb&q={}&start={}&num={}&gbv=1'
     results_per_page = 10
 
@@ -56,6 +56,10 @@ class GoogleSerpSpider(scrapy.Spider):
         results = None
         # Get the section containing the results
         results = response.xpath('//div[@class="g"]')
+
+        duplicated_results_para = False
+        duplicated_results_para = response.xpath('//p[@id="ofr"]').extract()
+
         estimated = "".join(
             response.xpath('//div[@id="resultStats"]/text()').extract())
         estimated = estimated.replace(',', '')
@@ -75,61 +79,66 @@ class GoogleSerpSpider(scrapy.Spider):
         items = []
 
         if estimated < 100:
-            expected_results = estimated
+            ex_results = estimated
         else: 
-            expected_results = 100
+            ex_results = 100
 
-        if self.rank <= 100:
-            self.logger.info('{}, {}'.format(self.rank, self.phrase))
+        if results and self.rank < ex_results and not duplicated_results_para:
             start_param_to_replace = update_url_start_index_parameter(
                 self.start_index)
-            
             self.start_index += self.results_per_page
-            
             start_param_replacement = update_url_start_index_parameter(
                 self.start_index)
-
             next_page_url = response.request.url.replace(
-                start_param_to_replace, start_param_replacement)
-
+                start_param_to_replace,
+                start_param_replacement)
+            self.logger.info('requesting: {}'.format(next_page_url))
             yield scrapy.Request(next_page_url, self.parse)
+        
+        elif duplicated_results_para:
+            duplicated_results_para = re.sub(r'<[^>]*?>',
+                                             '',
+                                             duplicated_results_para[0])
+            self.logger.info('Duplicated Results, < 100: {}'.format(
+                duplicated_results_para))
+            import ipdb; ipdb.set_trace()
 
-        for result in results:
-            if result.xpath('div[@class="s"]'):
-                if self.rank <= expected_results:
-                    item = HarvestmanItem()
+        if results:
+            for result in results:
+                if result.xpath('div[@class="s"]'):
+                    if self.rank <= ex_results:
+                        item = HarvestmanItem()
+                        item['keyphrase'] = self.phrase
+                        item['rank'] = self.rank
+                        item['estimated'] = estimated
 
-                    item['keyphrase'] = self.phrase
-                    item['rank'] = self.rank
-                    item['estimated'] = estimated
+                        try:
+                            title = result.xpath('h3[@class="r"]/a').extract()
+                            title = re.sub(r'<[^>]*?>', '', title[0])
+                            title = title.encode('utf-8')
+                        except IndexError:
+                            print('IndexError')
+                            continue
 
-                    try:
-                        title = result.xpath('h3[@class="r"]/a').extract()
-                        title = re.sub(r'<[^>]*?>', '', title[0])
-                        title = title.encode('utf-8')
-                    except IndexError:
-                        print('IndexError')
-                        continue
+                        try:
+                            snippet = result.xpath(
+                                'div[@class="s"]//span[@class="st"]').extract()
+                            snippet = re.sub(r'<[^>]*?>', '', snippet[0])
+                            snippet = snippet.encode('utf-8')
+                        except IndexError:
+                            print('IndexError')
+                            continue
 
-                    try:
-                        snippet = result.xpath(
-                            'div[@class="s"]//span[@class="st"]').extract()
-                        snippet = re.sub(r'<[^>]*?>', '', snippet[0])
-                        snippet = snippet.encode('utf-8')
-                    except IndexError:
-                        print('IndexError')
-                        continue
+                        item['title'] = title
+                        item['snippet'] = snippet
+                        link = "".join(result.xpath(
+                            'h3[@class="r"]/a/@href').extract())
 
-                    item['title'] = title
-                    item['snippet'] = snippet
-                    link = "".join(result.xpath(
-                        'h3[@class="r"]/a/@href').extract())
-
-                    if not link.startswith('/images?q='):
-                        if link.startswith('/url?q='):
-                            link = link.split('&sa')
-                            item['link'] = link[0].replace('/url?q=', '')
-                        items.append(item)
-                        self.rank += 1
-                    yield item
-                
+                        if not link.startswith('/images?q='):
+                            if link.startswith('/url?q='):
+                                link = link.split('&sa')
+                                item['link'] = link[0].replace('/url?q=', '')
+                            items.append(item)
+                            self.rank += 1
+                        
+                        yield item
