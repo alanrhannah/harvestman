@@ -74,6 +74,11 @@ class GoogleSerpSpider(scrapy.Spider):
             estimated = 0
         items = []
 
+        if estimated < 100:
+            expected_results = estimated
+        else: 
+            expected_results = 100
+
         if self.rank <= 100:
             self.logger.info('{}, {}'.format(self.rank, self.phrase))
             start_param_to_replace = update_url_start_index_parameter(
@@ -91,7 +96,7 @@ class GoogleSerpSpider(scrapy.Spider):
 
         for result in results:
             if result.xpath('div[@class="s"]'):
-                if self.rank <= 100:
+                if self.rank <= expected_results:
                     item = HarvestmanItem()
 
                     item['keyphrase'] = self.phrase
@@ -127,3 +132,4 @@ class GoogleSerpSpider(scrapy.Spider):
                         items.append(item)
                         self.rank += 1
                     yield item
+                
