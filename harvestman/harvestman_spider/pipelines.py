@@ -26,7 +26,6 @@ class HarvestmanPipeline(object):
 
     def spider_opened(self, spider):
         csv_file = settings.CSV_FILE_OUTPUT_DIR.format(
-            spider.phrase,
             spider.base_url.split('/')[2],
             datetime.date.today().strftime('%Y-%m-%d'))
 
