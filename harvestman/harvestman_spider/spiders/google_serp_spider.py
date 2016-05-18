@@ -59,7 +59,7 @@ class GoogleSerpSpider(scrapy.Spider):
             dt = datetime.datetime.today().strftime('%d-%m-%y %H:%M:%S')
             url = response.request.url
             proxy_ip = response.headers['X-Crawlera-Slave']
-            log_line = '{}, {}, {}'.format(dt, url, proxy_ip)
+            log_line = '{}, {}, {}\n'.format(dt, url, proxy_ip)
             ip_log_file.write(log_line)
 
         results = None
