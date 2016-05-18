@@ -56,7 +56,7 @@ class GoogleSerpSpider(scrapy.Spider):
             yield scrapy.Request(response.request.url, self.parse)
 
         with open('ip_log.log', 'a+') as ip_log_file:
-            dt = datetime.datetime.today().strftime('%D-%m-%Y %H:%M:%s')
+            dt = datetime.datetime.today().strftime('%d-%m-%y %H:%M:%S')
             url = response.request.url
             proxy_ip = response.headers['X-Crawlera-Slave']
             log_line = '{}, {}, {}'.format(dt, url, proxy_ip)
