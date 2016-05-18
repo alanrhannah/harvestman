@@ -1,7 +1,9 @@
 from __future__ import absolute_import
 
+import datetime
 import re
 import scrapy
+
 from harvestman.harvestman_spider import settings
 from harvestman.harvestman_spider.utils import update_url_start_index_parameter
 from harvestman.harvestman_spider.items import HarvestmanItem
@@ -53,6 +55,13 @@ class GoogleSerpSpider(scrapy.Spider):
             self.log_response_code(response)
             yield scrapy.Request(response.request.url, self.parse)
 
+        with open('ip_log.log', 'a+') as ip_log_file:
+            dt = datetime.datetime.today().strftime('%D-%m-%Y %H:%M:%s')
+            url = response.request.url
+            proxy_ip = response.headers['X-Crawlera-Slave']
+            log_line = '{}, {}, {}'.format(dt, url, proxy_ip)
+            ip_log_file.write(log_line)
+
         results = None
         # Get the section containing the results
         results = response.xpath('//div[@class="g"]')
@@ -101,7 +110,6 @@ class GoogleSerpSpider(scrapy.Spider):
                                              duplicated_results_para[0])
             self.logger.info('Duplicated Results, < 100: {}'.format(
                 duplicated_results_para))
-            import ipdb; ipdb.set_trace()
 
         if results:
             for result in results:
