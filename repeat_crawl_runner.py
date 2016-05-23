@@ -3,11 +3,10 @@ import subprocess
 
 import general_settings as settings
 
-run_crawl_runner = ['/home/alan/.virtualenvs/harvestman/bin/python',
-                    '/home/alan/development/harvestman_project/crawl_runner.py',
+run_crawl_runner = ['/home/queryclick/.virtualenvs/harvestman/bin/python',
+                    '/home/queryclick/harvestman/crawl_runner.py',
                     '-f',
-                    #'/home/queryclick/data/scrapy_input/long_list.txt',
-                    '/home/alan/development/data/scrapy_input/test_kps.txt',
+                    '/home/queryclick/data/scrapy_input/long_list.txt',
                     '-c',
                     'gb',
                     '-r',
@@ -15,7 +14,6 @@ run_crawl_runner = ['/home/alan/.virtualenvs/harvestman/bin/python',
 
 def main():
     list_jobs = request_list_jobs()
-    import ipdb; ipdb.set_trace()
     if len(list_jobs.json()['pending']) == 0:
         subprocess.call(run_crawl_runner)
 
